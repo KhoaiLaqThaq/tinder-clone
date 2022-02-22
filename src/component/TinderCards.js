@@ -1,19 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import TinderCard from 'react-tinder-card';
-import './../assets/css/TinderCards.css';
-import axios from './../services/axios';
+import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
 
-function TinderCards() {
+import {
+  getTinderCards
+} from './../reducers/TinderCards.reducer';
+import './../assets/css/TinderCards.css';
+
+const TinderCards = (props) => {
+  const dispatch = useDispatch();
   const [people, setPeople] = useState([]);
   const [lastDirection, setLastDirection] = useState("");
+  const swipeButtonType = useSelector(state => state.swipeButtonsReducers.action);
 
   useEffect(() => {
-    async function fetchData() {
-      const req = await axios.get("/tinder/cards");
-      setPeople(req.data)
+      props.getTinderCards();
+  }, []);
+
+  useEffect(() => {
+    if (props.tinderCards) {
+      setPeople(props.tinderCards);
     }
-    fetchData();
-  }, [])
+  }, [props.tinderCards])
+
+  useEffect(() => {
+    if (_.eq(swipeButtonType, 'refresh')) {
+      setPeople([]);
+      props.getTinderCards();
+      dispatch({ type: 'none' });
+    }
+  }, [swipeButtonType])
 
   const swiped = (direction, nameToDelete) => {
     console.log("removing: " + nameToDelete);
@@ -27,7 +45,7 @@ function TinderCards() {
   return (
     <div className="tinderCards">
       <div className="tinderCards__cardContainer">
-        {people.map((person) => (
+        {people && people.map((person) => (
           <TinderCard
             className="swipe"
             key={person.name}
@@ -48,4 +66,17 @@ function TinderCards() {
   );
 }
 
-export default TinderCards;
+const mapDispatchToProps = {
+  getTinderCards
+};
+
+const mapStateToProps = ({ tinderCardReducer }) => {
+  return {
+    tinderCards: tinderCardReducer.data,
+    loading: tinderCardReducer.loading,
+    message: tinderCardReducer.message,
+    action: tinderCardReducer.action
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TinderCards);

@@ -5,12 +5,20 @@ import StarRateIcon from '@mui/icons-material/StarRate';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import IconButton from '@mui/material/IconButton';
+import { useSelector, useDispatch } from 'react-redux';
+
 import './../assets/css/SwipeButtons.css';
 
 function SwipeButtons() {
+  const dispatch = useDispatch();
+
+  const refresh = () => {
+    dispatch({type: 'refresh'});  
+  }
+
   return (
     <div className="swipeButtons">
-      <IconButton className="swipeButtons__repeat">
+      <IconButton className="swipeButtons__repeat" onClick={refresh}>
         <ReplayIcon fontSize="large" />
       </IconButton>
       <IconButton className="swipeButtons__left">
