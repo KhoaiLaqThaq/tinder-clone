@@ -1,5 +1,5 @@
-import React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState, useEffect } from 'react';
+import FadeLoader from 'react-spinners/FadeLoader';
 import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 
@@ -7,13 +7,11 @@ import './../../assets/css/Common.css';
 
 function Loading() {
   const loading = useSelector(state => state.tinderCardReducer.loading);
+  const [color, setColor] = useState('#36d7b7');
+  const [show, setShow] = useState(false);
+  useEffect(() => { setShow(loading);}, [loading]);
 
-  return (
-    // <Box sx={{ display: loading ? 'flex':'none' }}></Box>
-    <Box sx={{ display: 'flex' }} className="loading-process">
-      <CircularProgress />
-    </Box>
-  )
+  return ( show ? (<Box className={'loading-process'}><FadeLoader color={color} loading={loading} /></Box>) : null);
 }
 
 export default Loading;

@@ -22,10 +22,16 @@
     }
   }
   
-  #spinner {
-    transform-origin: center;
-    animation-name: animation;
-    animation-duration: 1.2s;
-    animation-timing-function: cubic-bezier;
-    animation-iteration-count: infinite;
+  .loading-process {
+    position: absolute;
+    /* display: block; */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    opacity: 0.7;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 30%;
   }
